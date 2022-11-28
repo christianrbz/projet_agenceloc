@@ -1,0 +1,98 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+
+
+header{
+    background-image: url("../images/style/header_background.jpg");
+    background-size: cover;
+    background-position: bottom;
+    height: 400px;
+}
+
+header > div{
+    height: 50%;
+}
+
+header h1{
+    font-size: 50px;
+}
+
+header h4{
+    font-size: 15px;
+}
+
+#headerForm input, #headerForm button, #headerForm select {
+    border-radius: 0px !important;
+}
+
+#headerForm select, #headerForm input{
+    width: 200px;
+}
+
+
+/* ########## PAGE DE PROFIL ######## */
+
+
+.user-card-full {
+    overflow: hidden;
+}
+
+.card {
+    border-radius: 5px;
+    -webkit-box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
+    box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
+    border: none;
+    margin-bottom: 30px;
+}
+
+.m-r-0 {
+    margin-right: 0px;
+}
+
+.m-l-0 {
+    margin-left: 0px;
+}
+
+.user-card-full .user-profile {
+    border-radius: 5px 0 0 5px;
+}
+
+.bg-c-lite-green {
+        background: -webkit-gradient(linear, left top, right top, from(#f29263), to(#ee5a6f));
+    background: linear-gradient(to right, #ee5a6f, #f29263);
+}
+
+.user-profile {
+    padding: 20px 0;
+}
+
+.card-block {
+    padding: 1.25rem;
+}
+
+.m-b-25 {
+    margin-bottom: 25px;
+}
+
+.img-radius {
+    border-radius: 5px;
+}
+
+h6 {
+    font-size: 14px;
+}
+
+.card .card-block p {
+    line-height: 25px;
+}
+
+.card-photo{
+    overflow: hidden;
+}
+.card-photo img{
+    object-fit: cover;
+    width: 100%;
+}
