@@ -2,6 +2,13 @@
 
     require_once "inc/init.php";
 
+    // RESTRICTION D'ACCES 
+        if(isConnected()) : 
+            header("location:profil.php");
+            exit;
+        endif;
+    //
+
     // Gestion de la connexion
         if( isset($_POST['connect']) ){
 
@@ -16,12 +23,14 @@
 
                     $membre = getMembreByPseudo($_POST['pseudo']);
                     
-                    debug($membre);
-                    debug($_POST);
+                    // debug($membre);
+                    // debug($_POST);
                     // if($membre['mdp'] == $_POST['mdp']){ // Ce n'est pas possible de vérifier le mdp ainsi, car le mdp en BDD est haché
                     if(password_verify($_POST["mdp"], $membre['mdp'])){
 
                         $_SESSION['membre'] = $membre;
+
+                        $_SESSION['success']['connect'] = "Bravo vous êtes connecté";
 
                         header('location:profil.php');
                         exit;
@@ -34,7 +43,6 @@
 
                 }
             //
-
         }
     //
 

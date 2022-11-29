@@ -2,15 +2,19 @@
 
 <?php
 
+    // RESTRICTION D'ACCES 
+        if(isConnected()) : 
+            header("location:profil.php");
+            exit;
+        endif;
+    //
+
     // GESTION DE L'INSCRIPTION
         if( isset($_POST['subscribe']) ){
             debug($_POST);
 
             // Sécurisation des données
-                foreach ($_POST as $key => $value) {
-                    $_POST[$key] = htmlspecialchars($value, ENT_QUOTES); // echappement des caractères
-                    $_POST[$key] = trim($value); // suppression des espaces avant et après la chaine de caractère
-                }
+                dataEscape();
             //
 
             // Vérification des données 
