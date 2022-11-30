@@ -74,6 +74,59 @@ function isAdmin(){
 
     }
 
+    function updateMembre($id_membre, $data){
+        
+        global $bdd;
+
+        $requete = $bdd->prepare("UPDATE membre 
+                                SET pseudo = :pseudo, prenom = :prenom, nom = :nom, email = :email, civilite = :civilite, statut = :statut 
+                                WHERE id_membre = :id_membre");
+
+        return $requete->execute([
+            'pseudo' => $data['pseudo'],
+            'prenom' => $data['prenom'],
+            'nom' => $data['nom'],
+            'email' => $data['email'],
+            'civilite' => $data['civilite'],
+            'statut' => $data['statut'],
+            'id_membre' => $id_membre
+        ]);
+
+    }
+
+//
+
+// ######## FONCTIONS AGENCES 
+
+    function getAllAgences(){
+
+        global $bdd; 
+
+        $requete = $bdd->query("SELECT * FROM agence");
+        $agences = $requete->fetchAll();
+        return $agences;
+
+        return $bdd->query("SELECT * FROM agence")->fetchAll();
+
+    }
+
+    function addAgence($data){
+        
+        global $bdd;
+
+        $requete = $bdd->prepare("INSERT INTO agence VALUES (NULL, :titre_agence, :adresse, :ville, :cp, :description_agence, :photo_agence)");
+
+        return $requete->execute([
+            'titre_agence' => $data['titre_agence'], 
+            'adresse' => $data['adresse'], 
+            'ville' => $data['ville'], 
+            'cp' => $data['cp'], 
+            'description_agence' => $data['description_agence'], 
+            'photo_agence' => $data['photo_agence']
+        ]);
+        
+    }
+
 //
 
 function deleteFrom($id, $table){
