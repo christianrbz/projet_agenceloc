@@ -36,6 +36,17 @@ function isAdmin(){
 
 }
 
+function formData($data){
+
+    $array = [];
+
+    foreach ($data as $key => $value) {
+        $array[$key] = $value;
+    }
+
+    return $array;
+
+}
 
 // ######## FONCTIONS MEMBRE
 
@@ -124,7 +135,83 @@ function isAdmin(){
             'description_agence' => $data['description_agence'], 
             'photo_agence' => $data['photo_agence']
         ]);
-        
+
+    }
+
+    function getAgenceById($id_agence){
+
+        global $bdd;
+
+        $requete = $bdd->prepare("SELECT * FROM agence WHERE id_agence = :id_agence");
+        $requete->execute(['id_agence' => $id_agence]);
+
+        return $requete->fetch();
+
+    }
+
+    function updateAgence($id_agence, $data){
+
+        global $bdd;
+
+        $requete = $bdd->prepare("UPDATE agence SET titre_agence = :titre_agence, adresse = :adresse, ville = :ville, cp = :cp, description_agence = :description_agence, photo_agence = :photo_agence WHERE id_agence = :id_agence");
+        return $requete->execute([
+            'titre_agence' => $data['titre_agence'], 
+            'adresse' => $data['adresse'], 
+            'ville' => $data['ville'], 
+            'cp' => $data['cp'],
+            'description_agence' => $data['description_agence'],
+            'photo_agence' => $data['photo_agence'],
+            'id_agence' => $id_agence
+        ]);
+
+    }
+
+
+//
+
+// ######## FONCTIONS VEHICULES
+
+    function addVehicule($data){
+
+        global $bdd;
+
+        $requete = $bdd->prepare("INSERT INTO vehicule VALUES (NULL, :titre_vehicule, :marque, :modele, :description_vehicule, :photo_vehicule, :prix_journalier, :id_agence, :date_enregistrement)");
+
+        return $requete->execute([
+            'titre_vehicule' => $data['titre_vehicule'],
+            'marque' => $data['marque'],
+            'modele' => $data['modele'],
+            'description_vehicule' => $data['description_vehicule'],
+            'photo_vehicule' => $data['photo_vehicule'],
+            'prix_journalier' => $data['prix_journalier'],
+            'id_agence' => $data['id_agence'],
+            'date_enregistrement' => date("Y-m-d H:i:s")
+        ]);
+
+    }
+
+    function getAllVehicules(){
+
+        global $bdd;
+                
+        // $requete = $bdd->query("SELECT * FROM vehicule");
+        $requete = $bdd->query("SELECT vehicule.*, agence.titre_agence
+                                FROM vehicule 
+                                LEFT JOIN agence ON vehicule.id_agence = agence.id_agence");
+        $vehicules = $requete->fetchAll();
+
+        return $vehicules;
+
+        return $bdd->query("SELECT * FROM vehicule LEFT JOIN agence ON vehicule.id_agence = agence.id_agence")->fetchAll();
+    }
+
+    function getVehiculeById($id_vehicule){
+        global $bdd;
+
+        $requete = $bdd->prepare("SELECT * FROM vehicule WHERE id_vehicule = :id_vehicule");
+        $requete->execute(['id_vehicule' => $id_vehicule]);
+        return $requete->fetch();
+
     }
 
 //
