@@ -17,16 +17,18 @@
     </div>
 
     <div class="form-floating">
-        <input type="datetime-local" class="form-control" id="date_heure_depart" name="date_heure_depart" placeholder="Début de location">
+        <input type="datetime-local" class="form-control <?= isset($_SESSION['error']['filter']['date_heure_depart']) ? "is-invalid" : "" ?>" id="date_heure_depart" name="date_heure_depart" placeholder="Début de location" value="<?= $formData['date_heure_depart'] ?? "" ?>">
         <label for="date_heure_depart"><i class="fa-regular fa-calendar-days"></i> Début de location</label>
         <div class="invalid-feedback bg-white mt-0 text-center border border-danger border-top-0">
+                <?= $_SESSION['error']['filter']['date_heure_depart'] ?? "" ?>
         </div>
     </div>
     
     <div class="form-floating">
-        <input type="datetime-local" class="form-control" id="date_heure_fin" name="date_heure_fin" placeholder="Fin de location">
+        <input type="datetime-local" class="form-control  <?= isset($_SESSION['error']['filter']['date_heure_fin']) ? "is-invalid" : "" ?>" id="date_heure_fin" name="date_heure_fin" placeholder="Fin de location" value="<?= $formData['date_heure_fin'] ?? "" ?>">
         <label for="date_heure_fin"><i class="fa-regular fa-calendar-days"></i> Fin de location</label>
         <div class="invalid-feedback bg-white mt-0 text-center border border-danger border-top-0">
+            <?= $_SESSION['error']['filter']['date_heure_fin'] ?? "" ?>
         </div>
     </div>
 

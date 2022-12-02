@@ -2,18 +2,20 @@
 
 require_once "inc/init.php";
 
-// debug($_SESSION);
-if ( !isConnected() ) {
+if( !isConnected() ){
     header("location:connexion.php");
     exit;
 }
 
+$commandes = getCommandeByUser($_SESSION['membre']['id_membre']);
+debug($commandes);
+
 $title = "Profil";
 require_once RACINE_SITE . "inc/header.php";
 
-if( isset($_SESSION['success']['connect']) ){
+if( isset($_SESSION['success']) ){
     echo '<div class="alert alert-success col-md-6 mx-auto text-center">';
-        echo $_SESSION['success']['connect'];
+        echo $_SESSION['success'];
         unset($_SESSION['success']);
     echo '</div>';
 }
@@ -70,7 +72,6 @@ if( isset($_SESSION['success']['connect']) ){
         </div>
     </div>
 </div>
-
 
 <?php
 require_once RACINE_SITE . "inc/footer.php";

@@ -245,6 +245,39 @@ function formData($data){
 
 //
 
+// FONCTIONS COMMANDES
+    function addCommande($data){
+
+        global $bdd;
+
+        $requete = $bdd->prepare("INSERT INTO commande VALUES (NULL, :id_membre, :id_vehicule, :date_heure_depart, :date_heure_fin, :prix_total, NOW() )");
+
+        return $requete->execute([
+            'id_membre' => $data['id_membre'],
+            'id_vehicule' => $data['id_vehicule'],
+            'date_heure_depart' => $data['date_heure_depart'],
+            'date_heure_fin' => $data['date_heure_fin'],
+            'prix_total' => $data['prix_total']
+        ]);
+
+    }
+
+    function getCommandeByUser($id_membre){
+
+        global $bdd;
+
+        $requete = $bdd->prepare("SELECT * FROM commande 
+                                    LEFT JOIN vehicule ON vehicule.id_vehicule = commande.id_vehicule
+                                    INNER JOIN agence ON agence.id_agence = vehicule.id_agence
+                                    LEFT JOIN membre ON membre.id_membre = commande.id_membre
+                                    WHERE membre.id_membre = :id_membre"); 
+        $requete->execute(['id_membre' => $id_membre]);
+        return $requete->fetchAll();
+
+    }
+
+//
+
 function deleteFrom($id, $table){
 
     global $bdd;

@@ -30,7 +30,7 @@
 
                         $_SESSION['membre'] = $membre;
 
-                        $_SESSION['success']['connect'] = "Bravo vous êtes connecté";
+                        $_SESSION['success'] = "Bravo vous êtes connecté";
 
                         header('location:profil.php');
                         exit;
