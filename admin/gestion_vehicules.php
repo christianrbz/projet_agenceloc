@@ -78,10 +78,65 @@
             // Récupération du véhicule
                 $vehiculeSelected = getVehiculeById($_GET['id_vehicule']);
                 $formData = formData($vehiculeSelected);
-
-                // debug($formData);
             //
 
+            // Modification des données
+                if(isset($_POST["modifierVehicule"])){
+
+                    // Sécurisation des données
+                        dataEscape();
+                    //
+
+                    // Vérification des données
+                        if( empty($_POST['titre_vehicule']) ){
+                            $_SESSION['error']['titre_vehicule'] = "Merci d'ajouter un titre";
+                        }
+                        if( empty($_POST['marque']) || iconv_strlen($_POST['marque']) > 50 ){
+                            $_SESSION['error']['marque'] = "Merci d'ajouter un marque (caractères max 50)";
+                        }
+                        if( empty($_POST['modele']) || iconv_strlen($_POST['modele']) > 50 ){
+                            $_SESSION['error']['modele'] = "Merci d'ajouter un modèle (caractères max 50)";
+                        }
+                        if( empty($_POST['description_vehicule']) ){
+                            $_SESSION['error']['description_vehicule'] = "Merci d'ajouter une description";
+                        }
+                        if( empty($_POST['prix_journalier']) || !is_numeric($_POST['prix_journalier']) || $_POST['prix_journalier'] <= 0 ){
+                            $_SESSION['error']['prix_journalier'] = "Merci d'indiquer un prix journalier supèrieur à 0€";
+                        }
+                        if( empty($_POST['id_agence']) ){
+                            $_SESSION['error']['id_agence'] = "Merci de sélectionner une Agence";
+                        }
+                    //
+
+                    // Upload de la photo
+                        if( !empty($_FILES['photo_vehicule']['name']) ){ // modification de la photo
+
+                            copy($_FILES['photo_vehicule']['tmp_name'], RACINE_SITE . "assets/images/vehicules/" . $_FILES['photo_vehicule']['name']);
+
+                            $_POST['photo_vehicule'] = $_FILES['photo_vehicule']['name'];
+
+                        } else if( !empty($vehiculeSelected['photo_vehicule']) ) { // garder l'ancienne photo
+                            $_POST['photo_vehicule'] = $vehiculeSelected['photo_vehicule'];
+                        } else {
+                            $_SESSION['error']['photo_vehicule'] = "Merci d'ajouter une photo";
+                        }
+                    //
+
+                    // Envoie des données
+                        if( !isset($_SESSION['error']) ){
+
+                            $success = updateVehicule($_GET['id_vehicule'], $_POST);
+
+                            if($success){
+                                $_SESSION['success'] = "Le véhicule a bien été modifié";
+                            } else {
+                                $_SESSION['error']['general'] = "Erreur lors de la modification";
+                            }
+
+                        }
+                    //
+                }
+            //
         }
     //
 
@@ -153,7 +208,15 @@
 
 
     <!-- Formulaire d'ajout et de mofication -->
-    <h3 class="text-center mt-5">Ajouter un Véhicule</h3>
+
+    <?php if( isset($_GET['action']) && $_GET['action'] == 'modifier' ) { ?>
+        <div class="position-relative">
+            <a href="<?= URL ?>admin/gestion_vehicules.php" class="btn btn-primary position-absolute end-0 me-5">Ajouter un nouveau véhicule</a>
+            <h3 class="text-center mt-5 text-warning">Modifier le véhicule</h3>
+        </div>
+    <?php } else { ?>
+        <h3 class="text-center mt-5">Ajouter un nouveau véhicule</h3>
+    <?php } ?>
 
     <form action="" method="POST" class="d-flex flex-wrap justify-content-between mx-5 mb-5" enctype="multipart/form-data">
         <div class="form-group col-md-5 my-3">
@@ -204,7 +267,8 @@
             <select class="form-select <?= isset($_SESSION['error']['id_agence']) ? "is-invalid" : "" ?>" name="id_agence" id="id_agence">
                 <option selected disabled>Agence</option>
                 <?php foreach ($agences as $agence) { ?>
-                    <option value="<?= $agence['id_agence'] ?>"><?= $agence['titre_agence'] ?></option>
+                    <?php $selected = isset($formData['id_agence']) && $formData['id_agence'] === $agence['id_agence'] ? "selected" : "" ?>
+                    <option <?= $selected ?> value="<?= $agence['id_agence'] ?>"><?= $agence['titre_agence'] ?></option>
                 <?php } ?>
             </select>
             <div class="invalid-feedback">
@@ -213,9 +277,16 @@
         </div>
 
 
-        <div class="col-12 d-flex justify-content-center mt-3">
-            <button class="btn btn-primary" name="ajouterVehicule">Ajouter le véhicule</button>
-        </div>
+        <?php if( isset($_GET['action']) && $_GET['action'] == 'modifier' ) { ?>
+            <div class="col-12 d-flex justify-content-center mt-3">
+                <button class="btn btn-warning d-block mx-auto" name="modifierVehicule">Modifier Véhicule</button>
+            </div>
+        <?php } else { ?>
+            <div class="col-12 d-flex justify-content-center mt-3">
+                <button class="btn btn-success d-block mx-auto" name="ajouterVehicule">Ajouter Véhicule</button>
+            </div>
+        <?php } ?>
+
 
     </form>
 

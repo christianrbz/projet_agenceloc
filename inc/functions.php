@@ -195,14 +195,14 @@ function formData($data){
         global $bdd;
                 
         // $requete = $bdd->query("SELECT * FROM vehicule");
-        $requete = $bdd->query("SELECT vehicule.*, agence.titre_agence
+        $requete = $bdd->query("SELECT *
                                 FROM vehicule 
                                 LEFT JOIN agence ON vehicule.id_agence = agence.id_agence");
         $vehicules = $requete->fetchAll();
 
         return $vehicules;
 
-        return $bdd->query("SELECT * FROM vehicule LEFT JOIN agence ON vehicule.id_agence = agence.id_agence")->fetchAll();
+        return $bdd->query("SELECT vehicule.*, agence.titre_agence FROM vehicule LEFT JOIN agence ON vehicule.id_agence = agence.id_agence")->fetchAll();
     }
 
     function getVehiculeById($id_vehicule){
@@ -212,6 +212,35 @@ function formData($data){
         $requete->execute(['id_vehicule' => $id_vehicule]);
         return $requete->fetch();
 
+    }
+
+    function getVehiculesByCity($ville){
+        global $bdd;
+
+        $requete = $bdd->prepare("SELECT * 
+                                FROM vehicule 
+                                LEFT JOIN agence ON vehicule.id_agence = agence.id_agence
+                                WHERE ville = :ville");
+        $requete->execute(['ville' => $ville]);
+        return $requete->fetchAll();
+
+    }
+
+    function updateVehicule($id_vehicule, $data){
+        global $bdd;
+        
+        $requete = $bdd->prepare("UPDATE vehicule SET titre_vehicule = :titre_vehicule, marque = :marque, modele = :modele, description_vehicule = :description_vehicule, photo_vehicule = :photo_vehicule, prix_journalier = :prix_journalier, id_agence = :id_agence WHERE id_vehicule = :id_vehicule");
+
+        return $requete->execute([
+            'titre_vehicule' => $data['titre_vehicule'],    
+            'marque' => $data['marque'],
+            'modele' => $data['modele'],
+            'description_vehicule' => $data['description_vehicule'],
+            'photo_vehicule' => $data['photo_vehicule'],
+            'prix_journalier' => $data['prix_journalier'],
+            'id_agence' => $data['id_agence'],
+            'id_vehicule' => $id_vehicule
+        ]);
     }
 
 //
